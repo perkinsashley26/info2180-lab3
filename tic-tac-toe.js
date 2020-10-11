@@ -6,9 +6,10 @@ window.onload = function(){
     for (var a=0; a<board.length; a++){
         board[a].className= "square";
         addHover(board[a]); 
-        addSymbol(board[a]);
+        addSymbol(board[a],a);
+        
     }
-function addSymbol(child){
+function addSymbol(child,index){
     console.log(child);
             child.addEventListener("click", function(){
             var currentmove = null;
@@ -17,6 +18,7 @@ function addSymbol(child){
                     playnum++;
                     symbols.push("X");
                     placeSymbol("X", child);
+                    state(gamestate,index,currentmove);
                     console.log(symbols);
                 }
                 else{
@@ -24,7 +26,10 @@ function addSymbol(child){
                     playnum++;
                     symbols.push(currentmove);
                     placeSymbol(currentmove,child);
+                    state(gamestate,index,currentmove);
         }
+        gamestatus(gamestate,currentmove);
+        
     });
 }
 function nextSymbol(symbols,symbolNumber){
@@ -56,6 +61,16 @@ function addHover(child){
     }
 }    
 function gamestatus(gamestate, currentmove){
+    console.log(gamestate);
+    if(checkcolumn(gamestate,currentmove)===true){
+        winner(currentmove);
+    }
+    else if(checkrows(gamestate,currentmove)===true){
+        winner(currentmove);
+    }
+    else if(checkdiag(gamestate,currentmove)===true){
+        winner(currentmove);
+    }
     }
 
 function checkcolumn(gamestate, currentmove){
@@ -115,4 +130,40 @@ function checkrows(gamestate,currentmove){
     else{
         return false;
     }
+}
+function state(gamestate,currentsquare,symbol){
+    switch (currentsquare){
+        case 0:
+            gamestate[0][0] = symbol;
+            break;
+        case 1:
+            gamestate[0][1] = symbol;
+            break;
+        case 2:
+            gamestate[0][2] = symbol;
+            break;
+        case 3:
+            gamestate[1][0] = symbol;
+            break;
+        case 4:
+            gamestate[1][1] = symbol;
+            break;
+        case 5:
+            gamestate[1][2] = symbol;
+            break;
+        case 6:
+            gamestate[2][0] = symbol;
+            break;
+        case 7:
+            gamestate[2][1] = symbol;
+            break;
+        case 8:
+            gamestate[2][2] = symbol;
+            break; 
+    }
+}
+function winner(symbol){
+    var status = document.getElementById("status");
+    status.innerHTML=`Congratulations! ${symbol} is the Winner!`;
+    status.className="you-won";
 }
