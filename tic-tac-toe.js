@@ -1,13 +1,13 @@
 window.onload = function(){
-    var board = document.getElementById("board").children;
-    var symbols = [];
-    var gamestate = [[],[],[]];
-    var playnum = 0 ;
-    for (var a=0; a<board.length; a++){
+    let board = document.getElementById("board").children;
+    let symbols = [];
+    let gamestate = [[],[],[]];
+    let playnum = 0 ;
+    reset(gamestate,board);
+    for (let a=0; a<board.length; a++){
         board[a].className= "square";
         addHover(board[a]); 
-        addSymbol(board[a],a);
-        
+        addSymbol(board[a],a);   
     }
 function addSymbol(child,index){
     console.log(child);
@@ -39,7 +39,8 @@ function nextSymbol(symbols,symbolNumber){
     return "O";    
 }
 function placeSymbol(symbol,childdiv){
-    if ( symbol==="X"){
+    if (nocheats(childdiv)===false){
+        if ( symbol==="X"){
         childdiv.classList.add("X");
         childdiv.innerHTML= "X";
     }
@@ -47,7 +48,8 @@ function placeSymbol(symbol,childdiv){
         childdiv.classList.add("O");
         childdiv.innerHTML= "O";
     }
-    
+}
+
 }
 function addHover(child){
     console.log(child);
@@ -166,4 +168,28 @@ function winner(symbol){
     var status = document.getElementById("status");
     status.innerHTML=`Congratulations! ${symbol} is the Winner!`;
     status.className="you-won";
+}
+function reset(gamestate,board){
+    document.getElementsByClassName("btn")[0].onclick = function(){
+        console.log("click");
+        for (let a=0; a<board.length; a++){
+            board[a].className= "square";
+            board[a].innerHTML="";}
+            console.log("before"+gamestate);
+        gamestate=[[],[],[]];
+            console.log("after"+ gamestate); 
+        playnum = 0;
+        symbol =[];
+        let status=document.getElementById("status");
+        status.classList.remove("you-won");
+        status.innerHTML= 'Move your mouse over a square and click to play an X or an O.';
+    }
+}
+function nocheats(childdiv){
+    if (childdiv.classList.contains("X")|| childdiv.classList.contains("O")){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
